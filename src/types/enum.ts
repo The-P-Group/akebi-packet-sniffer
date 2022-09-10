@@ -1,12 +1,12 @@
 /** @format */
 
 export enum PacketType {
-	null,
-	packetData,
-	modifyData,
+	NULL,
+	PACKET_DATA,
+	MODIFY_DATA,
 }
 
 export enum PacketDirection {
-	Send,
-	Receive
+	SEND,
+	RECEIVE
 }
