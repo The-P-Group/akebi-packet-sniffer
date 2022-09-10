@@ -1,0 +1,19 @@
+0       2       4       6                10 (BYTE)
++-------+-------+-------+---------------+
+|0x4567 | CmdId |MtdSize| Payload Size  |
++---------------+---+---+---------------+ |
+|  Metadata Payload (PacketHead.proto)  | |
++---------------+---------------+-------+ |---> Payload sizes are determined by previous values
+|  Actual Payload (Something.proto)     | |
++---------------+---------------+-------+ |
+|0x89ab |
++-------+
+
+0x4567 is a constant (2 bytes)
+CmdId is a uint16 number (2 bytes)
+MtdSize is a uint16 number (2 bytes), gives the size for metadata (metadata is protobuf encoded)
+Payload Size is a uint32 number (4 bytes), gives the size for payload. (payload is protobuf encoded)
+
+(next values are metadata and payload)
+
+0x89ab is a constant (2 bytes)
