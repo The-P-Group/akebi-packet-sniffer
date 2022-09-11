@@ -40,6 +40,10 @@ export class Packet {
 		return switchedPacketIds[id];
 	}
 
+	static getCmdIdFromPacketName(name: string) {
+		return packetIds[name];
+	}
+
 	get packetType(): PacketType {
 		return this._packetType;
 	}
@@ -109,7 +113,32 @@ export class Packet {
 
 			this._packetName = Packet.getPacketNameFromCmdId(this._cmdId);
 
-			this._contentData = ProtobufParser.parsePacketData(this._rawContentData, this._packetName);
+			this.processPacketContentData()
+		}
+	}
+
+	private processPacketContentData() {
+		this._contentData = ProtobufParser.parsePacketData(this._rawContentData, this._packetName);
+
+		if (this._cmdId === Packet.getCmdIdFromPacketName('UnionCmdNotify')) {
+			const commands = [];
+
+			for (let i = 0; i < this._contentData.cmdList.length; i++) {
+				let { messageId, body } = this._contentData.cmdList[i];
+				const packetName = Packet.getPacketNameFromCmdId(messageId);
+
+				const bodyData = ProtobufParser.parsePacketData(body, packetName);
+
+				commands.push({
+					protoName: packetName,
+					packetID: messageId,
+					object: bodyData,
+				});
+			}
+
+			this._contentData = {
+				cmdList: commands,
+			};
 		}
 	}
 }

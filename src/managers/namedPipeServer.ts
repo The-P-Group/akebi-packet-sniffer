@@ -18,7 +18,7 @@ export class NamedPipeServer {
 	}
 
 	private listener(stream: Socket) {
-		console.log('Listening');
+		console.log('Connected');
 
 		stream.on('data', (c: Buffer) => {
 			// console.log('Server: on data:', c.toString('hex'));
