@@ -1,19 +1,32 @@
-0       2       4       6                10 (BYTE)
-+-------+-------+-------+---------------+
-|0x4567 | CmdId |MtdSize| Payload Size  |
-+---------------+---+---+---------------+ |
-|  Metadata Payload (PacketHead.proto)  | |
-+---------------+---------------+-------+ |---> Payload sizes are determined by previous values
-|  Actual Payload (Something.proto)     | |
-+---------------+---------------+-------+ |
-|0x89ab |
-+-------+
+0             4           12             13         17        19  (BYTE)
++-------------+-----------+--------------+----------+---------+
+| Packet Type | Timestamp | Manipulation | Direction| Cmd ID  |
++-----------------------------------------------------------+ |
 
-0x4567 is a constant (2 bytes)
-CmdId is a uint16 number (2 bytes)
-MtdSize is a uint16 number (2 bytes), gives the size for metadata (metadata is protobuf encoded)
-Payload Size is a uint32 number (4 bytes), gives the size for payload. (payload is protobuf encoded)
+19                 27                                       27 + x
++------------------+------------------------------------------+
+|  Metadata Length |   Metadata Payload (PacketHead.proto)    |
++------------------+----------------------------------------+ |---> Header sizes are determined by previous values
 
-(next values are metadata and payload)
+27 + x          27 + x + 8                             27 + x + 8 + y
++------------------+------------------------------------------+
+|  Content Length  |     Content Payload (Some.proto)         |
++------------------+----------------------------------------+ |---> Content sizes are determined by previous values
 
-0x89ab is a constant (2 bytes)
+
+PacketType is an uint32 number (4 bytes) - 0 = NULL | 1 = DATA_PACKET | 2 = MODIFY_PACKET
+Timestamp is an uint64 number (8 bytes) - Time in javascript millisecond
+Manipulation is an uint8 number (1 bytes) - 0 = Disable | 1 = Enable
+Direction is an uint32 number (4 bytes) - 0 = SEND | 1 = RECEIVE
+CmdId is an uint16 number (2 bytes)
+MetadataLength is an uint64 number (8 bytes), gives the size for metadata (metadata is protobuf encoded)
+ContentLength is an uint64 number (4 bytes), gives the size for payload. (payload is protobuf encoded)
+
+Ex: Sample Packet (UnionCmdNotify)
+01 00 00 00 | 89 c2 6f 26 83 01 00 00 | 00 | 00 00 00 00 | 05 00 | 0c 00 00 00 00 00 00 00 | 18 b1 08 28 01 30 89 85 bf b3
+b2 30 | 3d 00 00 00 00 00 00 00 | 0a 3b 40 bf 02 72 36 72 34 50 02 58 07 62 2e 08 ab 84 80 10 12 1e 0a 0f 0d 4c cd 24 c4
+15 7a 71 61 43 1d 1c 27 b7 44 12 05 15 e1 cc 6d 42 1a 00 20 25 32 00 18 ce 95 7e 20 c8 01 28 01
+
+
+
+Fuck up taiga
