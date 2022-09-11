@@ -1,0 +1,9 @@
+{
+    "ignorePacket": [
+        "UnionCmdNotify",
+        "PingReq",
+        "PingRsp",
+        "WorldPlayerRTTNotify",
+        "ObstacleModifyNotify"
+    ]
+}
