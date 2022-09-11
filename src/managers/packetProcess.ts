@@ -1,6 +1,6 @@
 /** @format */
 import { Packet } from './packet';
-import { PacketType } from '../types/enum';
+import { PacketDirection, PacketType } from '../types/enum';
 import { AkebiWebSocket } from './webSocket';
 
 export class PacketProcess {
@@ -10,11 +10,11 @@ export class PacketProcess {
 
 			if (packet.packetType == PacketType.PACKET_DATA || packet.packetType == PacketType.MODIFY_DATA) {
 				// console.log(packet.contentData);
-				console.log('RECEIVE: ', packet.packetName);
+				console.log(packet.direction === PacketDirection.SEND ? 'SEND: ' : 'RECV: ', packet.packetName);
 				AkebiWebSocket.addToQueue(packet);
 			}
-		} catch (e) {
-			// console.error(e);
+		} catch (e: any) {
+			console.error(e?.message);
 		}
 	}
 }

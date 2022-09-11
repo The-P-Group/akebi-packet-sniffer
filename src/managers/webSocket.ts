@@ -63,7 +63,7 @@ export class AkebiWebSocket {
 							cmd: 'PacketNotify',
 							data: this.packetToSend.map((packet) => {
 								return {
-									source: packet.direction === PacketDirection.RECEIVE ? 1 : 0,
+									source: packet.direction === PacketDirection.RECEIVE ? 0 : 1,
 									packetID: packet.cmdId,
 									protoName: packet.packetName,
 									object: packet.contentData,
